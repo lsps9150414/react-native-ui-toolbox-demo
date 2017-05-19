@@ -12,14 +12,11 @@ import {
   WrappedTouchableNativeFeedback,
 } from 'react-native-ui-toolbox';
 import {
+  Button,
   Platform,
   ScrollView,
   StyleSheet,
   Text,
-  TextInput,
-  TouchableHighlight,
-  TouchableNativeFeedback,
-  TouchableOpacity,
   View,
 } from 'react-native';
 
@@ -54,55 +51,68 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     marginBottom: 10,
   },
+  formInputWrapperStyle: {
+    marginBottom: 10,
+  },
+  formInputContainerStyle: {
+    backgroundColor: '#eee',
+  },
+  formInputStyle: {
+    color: '#333',
+  },
 });
-
-const ITEMS = [
-  { label: 'Option 1', value: '1' },
-  { label: 'Option 2', value: '2' },
-  { label: 'Option 3', value: '3' },
-  { label: 'Option 4', value: '4' },
-  { label: 'Option 5', value: '5' },
-  { label: 'Option 6', value: '6' },
-  { label: 'Option 7', value: '7' },
-  { label: 'Option 8', value: '8' },
-  { label: 'Option 9', value: '9' },
-  { label: 'Option 10', value: '10' },
-];
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      textInputValue: 'This is a text input',
+      textInputValue1: 'Text input',
+      textInputValue2: 'Text input (with validation)',
+      date: null,
+      time: null,
       locale: 'en',
-      date: new Date(),
-      pickedValue: ITEMS[2].value,
-      selectedValues: [0],
-      items: ITEMS,
+      pickedValue1: null,
+      pickedValue2: null,
+      selectedValues1: null,
+      selectedValues2: null,
     };
   }
-  textInputHandleChange = (value) => {
-    console.log(value);
-    this.setState({ textInputValue: value });
+
+  handleTextChange1 = (value) => {
+    this.setState({ textInputValue1: value });
   }
-  textInputValidator = value => (value.length > 4 && value.length < 21)
-  textInputErrorText = 'Length must be between 5 and 20.'
+
+  handleTextChange2 = (value) => {
+    this.setState({ textInputValue2: value });
+  }
 
   dateInputValidator = value => (false)
   dateInputErrorText = 'Length must be between 5 and 20.'
 
-  datePickerHandleDateChange = (date) => {
-    console.log(date);
+  handleDateChange = (date) => {
     this.setState({ date });
   }
-  pickerHandleValueChange = (value) => {
-    console.log(value);
-    this.setState({ pickedValue: value });
+
+  handleTimeChange = (time) => {
+    this.setState({ time });
   }
-  selectHandleValueChange = (values) => {
-    console.log(values);
-    this.setState({ selectedValues: values });
+
+  handlePickedChange1 = (value) => {
+    this.setState({ pickedValue1: value });
   }
+
+  handlePickedChange2 = (value) => {
+    this.setState({ pickedValue2: value });
+  }
+
+  handleSelectedChange1 = (values) => {
+    this.setState({ selectedValues1: values });
+  }
+
+  handleSelectedChange2 = (values) => {
+    this.setState({ selectedValues2: values });
+  }
+
   render() {
     return (
       <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
@@ -142,118 +152,158 @@ export default class App extends React.Component {
             <Heading>Form Inputs</Heading>
           </View>
           <FormTextInput
-            value={this.state.textInputValue}
-            onValueChange={this.textInputHandleChange}
-            wrapperStyle={{ marginBottom: 10 }}
-            containerStyle={{ backgroundColor: '#ddd' }}
-            validContainerStyle={{ borderBottomColor: 'green' }}
-            invalidContainerStyle={{ borderBottomColor: 'red' }}
-            inputStyle={{ color: 'blue' }}
-            validInputStyle={{ color: 'green' }}
-            invalidInputStyle={{ color: 'red' }}
-            validator={this.textInputValidator}
-            errorText={this.textInputErrorText}
+            value={this.state.textInputValue1}
+            onValueChange={this.handleTextChange1}
+            wrapperStyle={styles.formInputWrapperStyle}
+            containerStyle={styles.formInputContainerStyle}
+            inputStyle={styles.formInputStyle}
             showIcon
-
+            icon={{ name: 'textsms' }}
+          />
+          <FormTextInput
+            value={this.state.textInputValue2}
+            onValueChange={this.handleTextChange2}
+            wrapperStyle={styles.formInputWrapperStyle}
+            containerStyle={styles.formInputContainerStyle}
+            inputStyle={styles.formInputStyle}
+            showIcon
+            icon={{ name: 'textsms' }}
+            validContainerStyle={{ borderBottomColor: 'green' }}
+            validInputStyle={{ color: 'green' }}
+            invalidContainerStyle={{ borderBottomColor: 'red' }}
+            invalidInputStyle={{ color: 'red' }}
+            validator={value => (value && (value.length >= 5 && value.length <= 20))}
+            errorText={'Length must be between 5 and 20.'}
           />
           <FormDatePicker
-            mode={'time'}
-            // date={this.state.date}
-            onValueChange={this.datePickerHandleDateChange}
+            placeholder={'Date picker'}
+            mode={'date'}
+            date={this.state.date}
+            onValueChange={this.handleDateChange}
             locale={this.state.locale}
-            wrapperStyle={{ marginBottom: 10 }}
-            containerStyle={{ backgroundColor: '#ddd' }}
-            component={TouchableHighlight}
-
-            validInputStyle={{ color: 'green' }}
-            invalidInputStyle={{ color: 'red' }}
-            validator={this.dateInputValidator}
-            errorText={this.dateInputErrorText}
+            wrapperStyle={styles.formInputWrapperStyle}
+            containerStyle={styles.formInputContainerStyle}
+            inputStyle={styles.formInputStyle}
             showIcon
-            icon={{ color: 'red' }}
-            modal={{
-              height: 300,
-              controlBarHeight: 100,
-              confirmBtnText: '確定',
-              cancelBtnText: '取消',
-            }}
+            icon={{ name: 'date-range', color: 'green' }}
           />
+          <FormDatePicker
+            placeholder={'Time picker'}
+            mode={'time'}
+            date={this.state.time}
+            onValueChange={this.handleTimeChange}
+            locale={this.state.locale}
+            wrapperStyle={styles.formInputWrapperStyle}
+            containerStyle={styles.formInputContainerStyle}
+            inputStyle={styles.formInputStyle}
+            showIcon
+            icon={{ name: 'access-time', color: 'red' }}
+          />
+
           <FormPicker
-            selectedValue={this.state.pickedValue}
-            onValueChange={this.pickerHandleValueChange}
-            wrapperStyle={{ marginBottom: 10 }}
-            containerStyle={{ backgroundColor: '#ddd' }}
-            inputStyle={{ }}
-            component={TouchableHighlight}
-
-            invalidInputStyle={{ color: 'red' }}
-            validator={this.dateInputValidator}
-            errorText={this.dateInputErrorText}
-
-            fullScreen
+            placeholder={'Picker (custom modal style)'}
+            items={[
+              { value: true, label: 'Yep' },
+              { value: false, label: 'Nope' },
+            ]}
+            pickedValue={this.state.pickedValue1}
+            onValueChange={this.handlePickedChange1}
+            wrapperStyle={styles.formInputWrapperStyle}
+            containerStyle={styles.formInputContainerStyle}
+            inputStyle={styles.formInputStyle}
             showIcon
             modal={{
               height: 500,
               controlBarHeight: 100,
-              controlBarStyle: { backgroundColor: 'rgba(0,0,0,0.0)' },
-              contentContainerStyle: { backgroundColor: 'yellow' },
-              containerStyle: { borderWidth: 2 },
               controlBarPosition: 'bottom',
+              confirmBtnText: 'Done',
+              cancelBtnText: 'Nah',
+              containerStyle: { borderWidth: 3 },
+              bodyContainerStyle: { backgroundColor: 'mediumturquoise' },
+              bodyContentContainerStyle: {
+                margin: 20,
+                padding: 40,
+                flexGrow: 1,
+                justifyContent: 'center',
+                backgroundColor: 'rgba(255, 255, 255, 0.5)',
+              },
+              controlBarStyle: { backgroundColor: 'darkslategrey', borderColor: 'white', borderTopWidth: 3 },
+              cancelBtnTextStyle: { color: 'yellow' },
+              confirmBtnTextStyle: { color: 'white' },
             }}
           />
-          <FormPickerNative
-            selectedValue={this.state.pickedValue}
-            onValueChange={this.pickerHandleValueChange}
-            wrapperStyle={{ marginBottom: 10 }}
-            containerStyle={{ backgroundColor: '#ddd' }}
-            inputStyle={{ }}
-            component={TouchableNativeFeedback}
-
-            invalidInputStyle={{ color: 'red' }}
-            validator={this.dateInputValidator}
-            errorText={this.dateInputErrorText}
-
-            fullScreen
+          <FormPicker
+            placeholder={'Picker (full screen modal)'}
+            items={[
+              { value: true, label: 'Yep' },
+              { value: false, label: 'Nope' },
+            ]}
+            pickedValue={this.state.pickedValue2}
+            onValueChange={this.handlePickedChange2}
+            wrapperStyle={styles.formInputWrapperStyle}
+            containerStyle={styles.formInputContainerStyle}
+            inputStyle={styles.formInputStyle}
             showIcon
-            modal={{
-            }}
+            modal={{ fullScreen: true }}
           />
           <FormSelect
+            placeholder={'Selector'}
             items={[
-              { value: 0, label: '123123123' },
-              { value: 1, label: '456456456456' },
-              { value: 2, label: '789789789789789' },
-              { value: 3, label: '789789789789789' },
-              { value: 4, label: '789789789789789' },
+              { value: 1, label: 'Option 1' },
+              { value: 2, label: 'Option 2' },
+              { value: 3, label: 'Option 3' },
+              { value: 4, label: 'Option 4' },
+              { value: 5, label: 'Option 5' },
             ]}
-            component={WrappedTouchableNativeFeedback}
-            componentProps={{
-              activeOpacity: 0.1,
-            }}
-            selectedValues={this.state.selectedValues}
-            onValueChange={this.selectHandleValueChange}
-            containerStyle={{ backgroundColor: '#ddd', padding: 0, borderWidth: 0, borderRadius: 20, overflow: 'hidden', height: 100 }}
-            contentContainerStyle={{ backgroundColor: undefined }}
-            inputStyle={{ color: 'black' }}
+            selectedValues={this.state.selectedValues1}
+            onValueChange={this.handleSelectedChange1}
+            wrapperStyle={styles.formInputWrapperStyle}
+            containerStyle={styles.formInputContainerStyle}
+            inputStyle={styles.formInputStyle}
             showIcon
-
-            invalidInputStyle={{ color: 'red' }}
-            validator={this.dateInputValidator}
-            errorText={this.dateInputErrorText}
-
-            modal={{
-              height: 300,
-              controlBarHeight: 100,
-              confirmBtnText: '確定',
-              cancelBtnText: '取消',
-              fullScreen: true,
-            }}
+          />
+          <FormSelect
+            placeholder={'Selector (custom component)'}
+            component={WrappedTouchableNativeFeedback}
+            componentProps={{ activeOpacity: 0.1 }}
+            items={[
+              { value: 1, label: 'Option 1' },
+              { value: 2, label: 'Option 2' },
+              { value: 3, label: 'Option 3' },
+              { value: 4, label: 'Option 4' },
+              { value: 5, label: 'Option 5' },
+            ]}
+            selectedValues={this.state.selectedValues2}
+            onValueChange={this.handleSelectedChange2}
+            wrapperStyle={styles.formInputWrapperStyle}
+            containerStyle={styles.formInputContainerStyle}
+            inputStyle={styles.formInputStyle}
+            showIcon
           />
         </View>
 
-
-
-        <Text onPress={() => { this.setState({ locale: 'zh-tw', date: null }); }}>{'Set Date'}</Text>
+        <View style={[styles.cardContainer]}>
+          <Button
+            title={'Clear Date'}
+            onPress={() => { this.setState({ date: null }); }}
+          />
+          <Button
+            title={'Clear Time'}
+            onPress={() => { this.setState({ time: null }); }}
+          />
+          <Button
+            title={'Set Date locale to zh-tw'}
+            onPress={() => { this.setState({ locale: 'zh-tw' }); }}
+          />
+          <Button
+            title={'Clear Pickers'}
+            onPress={() => { this.setState({ pickedValue1: null, pickedValue2: null }); }}
+          />
+          <Button
+            title={'Clear Selector'}
+            onPress={() => { this.setState({ selectedValues1: null, selectedValues2: null }); }}
+          />
+        </View>
       </ScrollView>
     );
   }
