@@ -300,7 +300,7 @@ export default class App extends React.Component {
             onPress={() => { this.setState({ pickedValue1: null, pickedValue2: null }); }}
           />
           <Button
-            title={'Clear Selector'}
+            title={'Clear Selectors'}
             onPress={() => { this.setState({ selectedValues1: null, selectedValues2: null }); }}
           />
         </View>
