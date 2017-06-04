@@ -22,6 +22,6 @@
     "expo": "^16.0.0",
     "react": "16.0.0-alpha.6",
     "react-native": "^0.43.4",
-    "react-native-ui-toolbox": "0.0.18"
+    "react-native-ui-toolbox": "0.0.19"
   }
 }
