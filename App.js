@@ -68,6 +68,7 @@ export default class App extends React.Component {
     this.state = {
       textInputValue1: 'Text input',
       textInputValue2: 'Text input (with validation)',
+      textInputValue3: 'Text input (multiline)',
       date: null,
       time: null,
       locale: 'en',
@@ -84,6 +85,10 @@ export default class App extends React.Component {
 
   handleTextChange2 = (value) => {
     this.setState({ textInputValue2: value });
+  }
+
+  handleTextChange3 = (value) => {
+    this.setState({ textInputValue3: value });
   }
 
   dateInputValidator = value => (false)
@@ -174,6 +179,17 @@ export default class App extends React.Component {
             invalidInputStyle={{ color: 'red' }}
             validator={value => (value && (value.length >= 5 && value.length <= 20))}
             errorText={'Length must be between 5 and 20.'}
+          />
+          <FormTextInput
+            value={this.state.textInputValue3}
+            onValueChange={this.handleTextChange3}
+            wrapperStyle={styles.formInputWrapperStyle}
+            containerStyle={[styles.formInputContainerStyle, { height: 100 }]}
+            contentContainerStyle={{ alignItems: 'flex-start' }}
+            multiline
+            inputStyle={styles.formInputStyle}
+            showIcon
+            icon={{ name: 'textsms' }}
           />
           <FormDatePicker
             placeholder={'Date picker'}
